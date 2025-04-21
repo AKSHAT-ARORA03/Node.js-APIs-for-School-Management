@@ -1,84 +1,225 @@
 {
-    "info": {
-        "name": "School Management APIs",
-        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-    },
-    "item": [
-        {
-            "name": "Add School",
-            "request": {
-                "method": "POST",
-                "header": [
-                    {
-                        "key": "Content-Type",
-                        "value": "application/json"
-                    }
-                ],
-                "body": {
-                    "mode": "raw",
-                    "raw": "{\"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060}"
-                },
-                "url": {
-                    "raw": "{{baseUrl}}/api/addSchool",
-                    "host": ["{{baseUrl}}"],
-                    "path": ["api", "addSchool"]
-                }
-            },
-            "response": [
-                {
-                    "name": "Success",
-                    "status": "Created",
-                    "code": 201,
-                    "body": "{\"message\": \"School added successfully\", \"id\": 1}"
-                },
-                {
-                    "name": "Validation Error",
-                    "status": "Bad Request",
-                    "code": 400,
-                    "body": "{\"error\": \"Name is required\"}"
-                }
-            ]
-        },
-        {
-            "name": "List Schools",
-            "request": {
-                "method": "GET",
-                "url": {
-                    "raw": "{{baseUrl}}/api/listSchools?latitude=40.7128&longitude=-74.0060",
-                    "host": ["{{baseUrl}}"],
-                    "path": ["api", "listSchools"],
-                    "query": [
-                        {
-                            "key": "latitude",
-                            "value": "40.7128"
-                        },
-                        {
-                            "key": "longitude",
-                            "value": "-74.0060"
-                        }
-                    ]
-                }
-            },
-            "response": [
-                {
-                    "name": "Success",
-                    "status": "OK",
-                    "code": 200,
-                    "body": "[{\"id\": 1, \"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060, \"distance\": 0}]"
-                },
-                {
-                    "name": "Validation Error",
-                    "status": "Bad Request",
-                    "code": 400,
-                    "body": "{\"error\": \"Valid latitude is required (-90 to 90)\"}"
-                }
-            ]
-        }
-    ],
-    "variable": [
-        {
-            "key": "baseUrl",
-            "value": "http://localhost:3000"
-        }
-    ]
+	"info": {
+		"_postman_id": "140dec5a-d2d4-47e0-a355-6ccdbe3f098d",
+		"name": "School Management APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38357772"
+	},
+	"item": [
+		{
+			"name": "Add School",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/addSchool",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"addSchool"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/addSchool",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"addSchool"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"message\": \"School added successfully\", \"id\": 1}"
+				},
+				{
+					"name": "Validation Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/addSchool",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"addSchool"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"error\": \"Name is required\"}"
+				}
+			]
+		},
+		{
+			"name": "List Schools",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/listSchools?latitude=40.7128&longitude=-74.0060",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"listSchools"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "40.7128"
+						},
+						{
+							"key": "longitude",
+							"value": "-74.0060"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/listSchools?latitude=40.7128&longitude=-74.0060",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"listSchools"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "40.7128"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "[{\"id\": 1, \"name\": \"Example School\", \"address\": \"123 Main St\", \"latitude\": 40.7128, \"longitude\": -74.0060, \"distance\": 0}]"
+				},
+				{
+					"name": "Validation Error",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/listSchools?latitude=40.7128&longitude=-74.0060",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"listSchools"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "40.7128"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"error\": \"Valid latitude is required (-90 to 90)\"}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://school-management-api-5mq9.onrender.com"
+		}
+	]
 }
