@@ -1,57 +1,60 @@
-const connection = require('../config/db');
-const validator = require('validator');
-const { calculateDistance } = require('../utils/distance');
+const connectDB = require('../config/db');
+const calculateDistance = require('../utils/distance');
 
-exports.addSchool = (req, res) => {
-    const { name, address, latitude, longitude } = req.body;
+// Add a new school
+exports.addSchool = async (req, res) => {
+    try {
+        const { name, address, latitude, longitude } = req.body;
 
-    // Input validation
-    if (!name || validator.isEmpty(name.trim())) {
-        return res.status(400).json({ error: 'Name is required' });
-    }
-    if (!address || validator.isEmpty(address.trim())) {
-        return res.status(400).json({ error: 'Address is required' });
-    }
-    if (!latitude || !validator.isFloat(latitude.toString(), { min: -90, max: 90 })) {
-        return res.status(400).json({ error: 'Valid latitude is required (-90 to 90)' });
-    }
-    if (!longitude || !validator.isFloat(longitude.toString(), { min: -180, max: 180 })) {
-        return res.status(400).json({ error: 'Valid longitude is required (-180 to 180)' });
-    }
-
-    const query = 'INSERT INTO schools (name, address, latitude, longitude) VALUES (?, ?, ?, ?)';
-    connection.query(query, [name.trim(), address.trim(), latitude, longitude], (err, results) => {
-        if (err) {
-            console.error('Error inserting school:', err);
-            return res.status(500).json({ error: 'Database error' });
+        // Validate input
+        if (!name || !address || typeof latitude !== 'number' || typeof longitude !== 'number') {
+            return res.status(400).json({ error: 'All fields are required and latitude/longitude must be numbers' });
         }
-        res.status(201).json({ message: 'School added successfully', id: results.insertId });
-    });
+
+        // Connect to database
+        const connection = await connectDB();
+
+        // Insert school into database
+        const [result] = await connection.query(
+            'INSERT INTO schools (name, address, latitude, longitude) VALUES (?, ?, ?, ?)',
+            [name, address, latitude, longitude]
+        );
+
+        // Close connection
+        await connection.end();
+
+        res.status(201).json({ message: 'School added successfully', id: result.insertId });
+    } catch (error) {
+        console.error('Error adding school:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
 
-exports.listSchools = (req, res) => {
-    const { latitude, longitude } = req.query;
+// List schools sorted by proximity
+exports.listSchools = async (req, res) => {
+    try {
+        const { latitude, longitude } = req.query;
 
-    // Validate query parameters
-    if (!latitude || !validator.isFloat(latitude.toString(), { min: -90, max: 90 })) {
-        return res.status(400).json({ error: 'Valid latitude is required (-90 to 90)' });
-    }
-    if (!longitude || !validator.isFloat(longitude.toString(), { min: -180, max: 180 })) {
-        return res.status(400).json({ error: 'Valid longitude is required (-180 to 180)' });
-    }
-
-    const query = 'SELECT * FROM schools';
-    connection.query(query, (err, results) => {
-        if (err) {
-            console.error('Error fetching schools:', err);
-            return res.status(500).json({ error: 'Database error' });
+        // Validate input
+        if (!latitude || !longitude) {
+            return res.status(400).json({ error: 'Latitude and longitude are required' });
         }
 
-        // Calculate distance and sort
         const userLat = parseFloat(latitude);
         const userLon = parseFloat(longitude);
-        
-        const schoolsWithDistance = results.map(school => ({
+
+        if (isNaN(userLat) || isNaN(userLon)) {
+            return res.status(400).json({ error: 'Invalid latitude or longitude' });
+        }
+
+        // Connect to database
+        const connection = await connectDB();
+
+        // Fetch all schools
+        const [schools] = await connection.query('SELECT * FROM schools');
+
+        // Calculate distances and sort
+        const schoolsWithDistance = schools.map(school => ({
             ...school,
             distance: calculateDistance(userLat, userLon, school.latitude, school.longitude)
         }));
@@ -59,6 +62,12 @@ exports.listSchools = (req, res) => {
         // Sort by distance
         schoolsWithDistance.sort((a, b) => a.distance - b.distance);
 
-        res.json(schoolsWithDistance);
-    });
+        // Close connection
+        await connection.end();
+
+        res.status(200).json(schoolsWithDistance);
+    } catch (error) {
+        console.error('Error listing schools:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
